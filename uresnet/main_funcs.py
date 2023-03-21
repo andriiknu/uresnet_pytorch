@@ -363,6 +363,7 @@ def full_inference_loop(flags, handlers):
     global_metrics['iteration'] = np.hstack(global_metrics['iteration'])
     # global_metrics['iteration'] = np.repeat(global_metrics['iteration'][:, None], global_metrics['id'].shape[1])
     for key in global_metrics:
+        if key == 'misclassified_pixels': continue
         global_metrics[key] = np.array(global_metrics[key])
 
     res = {}

@@ -4,6 +4,8 @@ import sys
 URESNET_DIR = os.path.dirname(os.path.abspath(__file__))
 URESNET_DIR = os.path.dirname(URESNET_DIR)
 sys.path.insert(0, URESNET_DIR)
+sys.path.insert(1, "%s/uresnet/iotools"%URESNET_DIR)
+sys.path.insert(2, "%s/uresnet/models"%URESNET_DIR)
 from uresnet.flags import URESNET_FLAGS
 
 def main():
