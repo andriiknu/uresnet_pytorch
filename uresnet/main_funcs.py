@@ -443,15 +443,16 @@ def full_inference_loop(flags, handlers):
 
         if 'misclassified_pixels' in res:
             for i, x in enumerate(np.concatenate(res['misclassified_pixels'])):
-                handlers.pixels_logger.record(['id'],[idx])
-                handlers.pixels_logger.record(['pixel_label'], [x[-1]])
-                handlers.pixels_logger.record(['pixel_energy'], [x[-2]])
-                handlers.pixels_logger.record(['pixel_prediction'], [x[-3]])
-                handlers.pixels_logger.record(['pixel_predicted_softmax'], [x[-4]])
-                handlers.pixels_logger.record(['pixel_correct_softmax'], [x[-5]])
-                for d in range(flags.DATA_DIM):
-                    handlers.pixels_logger.record(['pixel_coord_%d' % d], [x[d]])
-                handlers.pixels_logger.write()
+                if x[-1] == 4:
+                    handlers.pixels_logger.record(['id'],[idx])
+                    # handlers.pixels_logger.record(['pixel_label'], [x[-1]])
+                    handlers.pixels_logger.record(['pixel_energy'], [x[-2]])
+                    handlers.pixels_logger.record(['pixel_prediction'], [x[-3]])
+                    # handlers.pixels_logger.record(['pixel_predicted_softmax'], [x[-4]])
+                    # handlers.pixels_logger.record(['pixel_correct_softmax'], [x[-5]])
+                    for d in range(flags.DATA_DIM):
+                        handlers.pixels_logger.record(['pixel_coord_%d' % d], [x[d]])
+                    handlers.pixels_logger.write()
 
     # Finalize
     if handlers.csv_logger:
