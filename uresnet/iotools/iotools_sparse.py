@@ -90,6 +90,8 @@ def threadio_func(io_handle, thread_id):
         - label = [(N, 1)] * batch size
     where N = total number of points across minibatch_size events
     """
+    # lens = np.array([len(voxels) for voxels in io_handle.blob()['voxels']])
+    # np.save(f'/home/andrii/master/uresnet_pytorch/log/debug/lens.npy', lens) 
     num_gpus = max(1, len(io_handle._flags.GPUS))
     batch_per_step = io_handle.batch_per_step()
     batch_per_gpu = io_handle.batch_per_gpu()
@@ -106,7 +108,9 @@ def threadio_func(io_handle, thread_id):
             for key, val in io_handle.blob().items():
                 blob[key] = []
             if io_handle._flags.SHUFFLE:
-                idx_v = np.random.random([batch_per_step])*io_handle.num_entries()
+                # idx_v = np.random.random([batch_per_step])*io_handle.num_entries()
+                idx_v = np.random.random([batch_per_step])*2560
+                # idx_v = np.array([1478])
                 idx_v = idx_v.astype(np.int32)
                 # for key, val in io_handle.blob().iteritems():
                 #     blob[key] = val  # fixme start, val?
@@ -137,6 +141,7 @@ def threadio_func(io_handle, thread_id):
 
             for data_id, idx in enumerate(idx_v):
                 voxel  = io_handle.blob()['voxels'][idx]
+                # np.save(f'/home/andrii/master/uresnet_pytorch/log/debug/{idx}', voxel)
                 new_id = int(data_id / batch_per_gpu)
                 voxel_v[new_id].append(np.pad(voxel, [(0,0),(0,1)],'constant',constant_values=data_id))
                 feature_v[new_id].append(io_handle.blob()['feature'][idx])
